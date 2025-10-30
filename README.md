@@ -1,30 +1,81 @@
-# TD UV Prefab
-This is a baseproject that shows how UV can be used as the project- and dependency-manager for TouchDesigner.
+# tdp MVP
+### TDP stands for TouchDesignerPackage
+This repository deminstrates a project that can be packaged, uploaded and installes to and from PyPi using PIP, uv or similiar and be used in TouchDesigner
 
-It uses a hack to mount the package-folders defined in the .packagefolder-file just in time, without any raceconditions. [ Blogpost coming ]
+## Package Members
+TDP Implements a number of required members to be working. They do not follow default python naming but use CamelCase to adhere to the default TouchDesigner naming conventions.
+### Comp Package
+```python
+from pathlib import Path
 
-Check /local/modules as it could be used for any dependency manager. I just like UV most.
+# The __init__.py file needs to be located next to the toxfile.
+ToxFile = Path( Path(  __file__ ).parent, "TargetTox.tox" )
 
-## Install UV
-https://docs.astral.sh/uv/getting-started/installation/
-
-## Python Version
-Make sure to set the correct python version in .python-version and/or .touchdesigner-version.
-
-## MonkeyBrain
-This packkages implements https://github.com/PlusPlusOneGmbH/MonkeyBrain
-Use ```uv run mb edit``` to start TD.
-
-Check docks for pyproject.toml settings and additional commands.
+# If several components want to instanciate this ToxFile, but only one is required in the project,
+# this member allows for a clearly defined global op shortcut.
+DefaultGlobalOpShortcut = "TARGETGLOBAL"
 
 
-## Developing a package
-This project can, to some extend even be used as the basis of a TouchDesigner Package. 
+from typing import TYPE_CHECKING, Union
+if TYPE_CHECKING:
+  # This allows for importing Typing without having to import and instanciate the object an additional time.
+    from .extExtensionFile import extExtensionClass
+    Typing = Union[
+        extExtensionClass
+    ]
+else:
+    Typing = None
 
-For this to work, you need to externalize all important data in to a subdirectory like ```src/PackageName``` which contains an ```__init__.py``` file. 
+# Make sure to only export required members.
+__all__ = ["ToxFile", "Typing", "DefaultGlobalOpShortcut"]
 
-As an example you can check out the current DevBranch of the TauCeti Repository. 
-[TauCeti PresetSystem on Github.com](https://github.com/PlusPlusOneGmbH/TD_TauCeti_Presetsystem/tree/dev)
+```
+### Comp Collection
+In the case of deploying several components in the same package, a package can be a collection.
 
-The package follows the same structure as a default python package. This means you can follow almost any guide for simple python packages. Also, this package then could be published to PyPI.
-[Packaging PythonProject on Python.org](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
+Make sure to import all sub-componente-modules in the root ```__init__.py```  file and add the following members.
+```python
+# Makre sure subpackages are imported so they can be accesses via the mod. method.
+from . import ToxModuleOne
+from . import ToxModuleTwo
+
+# Future Proofing
+__minimum_td_version__ = "2023.1200"
+
+# Futureprrofing for automated search of toxfiles and imports.
+_ToxFiles = {
+    "ToxModuleOne" : ToxModuleOne.ToxFile,
+    "ToxModuleTwo" : ToxModuleTwo.ToxFile
+}
+```
+
+This allows the use of TouchDesigner ```mod``` functionality, otherwise you would  not be able to refference submodules.
+
+## Notes
+Make sure that your Components are set to __Relative to External COMP File (.tox)__ and the paths to external files are aso set acordingly.
+
+Keep as much of your python externalised in .py files to alow for good typehinting.
+
+TouchDesigner and Python behave differently when importing. If you require relative imports to work in TD and to be importable, you will need to do the following check:
+```python
+if __package__ is None:
+  # This means we are in TouchDesigner and we use the TD-Based rules of importing.
+  # https://docs.derivative.ca/MOD_Class
+	import DatNextToThis
+else:
+  # We are in package-world. Here we need to specificy that we want to import from a file relative to our current position.
+	from . import DatNextToThis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
