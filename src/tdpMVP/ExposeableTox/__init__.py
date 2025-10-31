@@ -12,7 +12,10 @@ ToxFile = Path( Path(  __file__ ).parent, "ExposeableTox.tox" )
 
 # If several components want to instanciate this ToxFile, but only one is required in the project,
 # this member allows for a clearly defined global op shortcut.
-DefaultGlobalOpShortcut = "A897a62dd-8653-4feb-b0b8-94070756566d"
+# Using an UUID is not the worst approach, so there are now conflicts. 
+# But usng something like PACKAGE_COMP name is also totaly apropiate.
+
+DefaultGlobalOpShortcut = "A897a62dd86534febb0b8-94070756566d"
 
 
 from typing import TYPE_CHECKING, Union
