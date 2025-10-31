@@ -1,15 +1,13 @@
 [project]
-name = "td-uvmanagedprefab"
+name = "tdp-ExposeableTox"
 version = "0.0.1"
-description = "A prefab for TouchDesigner-Projects that will be complelty managed and run by UV."
+description = "A minimal TouchDesigner Package."
 readme = "README.md"
 keywords=["TouchDesigner"]
 authors = []                    # Required for PyPi-Publishing
 license-files = ["LICENSE"]     # Do not forgot to adjust ;)
 requires-python = ">=3.11"
-dependencies = [
-    "tdp-touchutilcollection>=0.4.0",
-]
+dependencies = []
 
 [tool.uv]
 environments = [
@@ -20,7 +18,7 @@ environments = [
 ## Dev Dependencies.
 [dependency-groups]
 dev = [
-    "monkeybrain>=0.2.3",
+    "monkeybrain>=0.2.3", # Can be omiited if wanted.
 ]
 
 ## TouchLaucnh Settings
@@ -31,12 +29,12 @@ enforce-version="closest-build" # Options: strict, closest-build, latest-build, 
 ## Package Requirements
 # Uncomment for Package-Development!
 
-# [build-system]
-# requires = ["setuptools>=61.0"]
-# build-backend = "setuptools.build_meta"
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
-# [tool.setuptools.packages.find]
-# where = ["src"] # Or any folder where the packeg-structure resides on.
+[tool.setuptools.packages.find]
+where = ["src"] # Or any folder where the packeg-structure resides on.
 
-# [tool.setuptools.package-data]
-# "*" = ["*.tox"] # Otherwise binary tox-files will be ignored.
+[tool.setuptools.package-data]
+"*" = ["*.tox"] # Otherwise binary tox-files will be ignored.
