@@ -9,9 +9,9 @@ The TopLevel-Module omits the dash in favor no-seperator at all.
 
 __Package-Name:__ tdp-MVP
 
-__TopLevel Module Name:__ tdpMPV
+__TopLevel Module Name:__ tdpMVP
 
-TDP Implements a number of required members to be working. They do not follow default python naming but use CamelCase to adhere to the default TouchDesigner naming conventions.
+TDP implements a number of required members to be working. They do not follow default python naming and use CamelCase instead to adhere to the default TouchDesigner naming conventions.
 
 ## Comp Package
 ```python
